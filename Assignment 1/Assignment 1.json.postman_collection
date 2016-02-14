@@ -1,0 +1,34 @@
+{
+	"id": "c20eed0b-aee6-68d3-be63-6efc7b0d74ec",
+	"name": "CSCI 3800_Web API_Assignment 1",
+	"description": "Kevin Yang___Web API_Assignment 1",
+	"order": [
+		"71590a2f-622e-c431-5fac-e846cc664bb6"
+	],
+	"folders": [],
+	"timestamp": 1455043507276,
+	"owner": 0,
+	"remoteLink": "",
+	"public": false,
+	"requests": [
+		{
+			"id": "71590a2f-622e-c431-5fac-e846cc664bb6",
+			"headers": "",
+			"url": "https://www.googleapis.com/books/v1/volumes?q=turing",
+			"preRequestScript": "",
+			"pathVariables": {},
+			"method": "GET",
+			"data": [],
+			"dataMode": "params",
+			"version": 2,
+			"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;\nvar data = JSON.parse(responseBody);\n\ntests[\"items found\"] = data.items && data.items.length > 0;\ntests[\"A book title has 'Turing'\"] = false;\n\nconsole.log(data.items.length +\" items found! Book titles:\");\nvar i = 0;\nfor (i=0;i < data.items.length;++i) {\n    if (data.items[i].volumeInfo && data.items[i].volumeInfo.authors) {\n        if (data.items[i].volumeInfo.title.search(/turing/i) >= 0)\n            tests[\"A book title has 'Turing'\"] = true;\n        console.log(\"\\t\"+ data.items[i].volumeInfo.title);\n    }\n}\n",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1455047576955,
+			"name": "Turing Books",
+			"description": "",
+			"collectionId": "c20eed0b-aee6-68d3-be63-6efc7b0d74ec",
+			"responses": []
+		}
+	]
+}
