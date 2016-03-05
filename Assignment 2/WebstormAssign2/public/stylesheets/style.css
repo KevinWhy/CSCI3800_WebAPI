@@ -1,0 +1,40 @@
+/*
+ * The contents of this file is sent when server
+ * responds with the headers of a request.
+ */
+
+/* Center almost everything */
+h1,h3, th, td:first-child {
+  text-align: center;
+}
+table {
+  margin: auto;
+  margin-bottom: 2em; /* Add spacing between tables */
+}
+
+/* Add padding to each cell */
+th, td {
+  padding-left: 1em;
+  padding-right: 1em;
+}
+/* Add color to every other row*/
+tr:nth-child(even) {
+  background-color: lightblue;
+}
+
+/* Make a border for the table */
+table {
+  border-collapse: collapse;
+}
+td {
+  border-style: solid;
+  border-width: thin;
+}
+th {
+  border-bottom-style: solid;
+  border-bottom-width: thick;
+}
+th:first-child {
+  border-right-style: solid;
+  border-right-width: thin;
+}
