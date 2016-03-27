@@ -1,0 +1,2 @@
+Kevin's answer: OAuth tokens should not be granted in the main proxy because one log-in may be used for multiple APIs. (For example, multiple APIs may be packaged together into one product.)
+Giving OAuth tokens in the main proxy would lead to a lot of redundant code.
