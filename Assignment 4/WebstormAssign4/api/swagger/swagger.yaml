@@ -1,0 +1,253 @@
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  title: Hello World App
+# during dev, should point to your local machine
+host: localhost:10010
+# basePath prefixes all resource paths 
+basePath: /
+# 
+schemes:
+  # tip: remove http to make production-grade
+  - http
+  - https
+# format of bodies a client can send (Content-Type)
+consumes:
+  - application/json
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+x-a127-config: {}
+x-a127-services: {}
+paths:
+  # complex objects have schema definitions
+  /movies:
+    # Endpoint to do stuff to many movies
+    x-swagger-router-controller: movieList
+    x-a127-apply: {}
+    get:
+      description: Return a list of movies. If filtering on actor, it doesn't show up in the query.
+      # used as the method name of the controller
+      operationId: getMovies
+      parameters:
+        - name: title
+          in: query
+          description: First part of the movie's name to search for
+          required: false
+          type: string
+        - name: year
+          in: query
+          description: Year the movie was released
+          required: false
+          type: string
+        - name: actor
+          in: query
+          description: First part of an actor's name that was in the movie
+          required: false
+          type: string
+      responses:
+        "200":
+          description: Successfully got a list of movies
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/JsonResponse"
+        # responses may fall through to errors
+        default:
+          description: Failed to get a list of movies
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    post:
+      description: Add a movie. All params must be valid.
+      # used as the method name of the controller
+      operationId: addMovie
+      parameters:
+        - name: new-params
+          in: body
+          description: The contents of the new movie. Must have title, year, and an array 'actors' with 3 names
+          required: true
+          schema:
+            $ref: "#/definitions/NewParams"
+      responses:
+        "200":
+          description: Successfully added a movie
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/JsonResponse"
+        # responses may fall through to errors
+        default:
+          description: Failed to add a movie
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    put:
+      description: Modify all the movies that match the params. Must specify one 'new' valid param. (invalid ones are ignored)
+      # used as the method name of the controller
+      operationId: changeMovies
+      parameters:
+        - name: title
+          in: query
+          description: If set, only modify movies that with a title starting with this string
+          required: false
+          type: string
+        - name: year
+          in: query
+          description: If set, only modify movies that were released on this year
+          required: false
+          type: string
+        - name: actor
+          in: query
+          description: If set, only modify movies with an actor whose name starts with this string
+          required: false
+          type: string
+        - name: new-params
+          in: body
+          description: The values in the movies to replace. If some values aren't specified, the old values are kept.
+          required: true
+          schema:
+            $ref: "#/definitions/NewParams"
+      responses:
+        "200":
+          description: Successfully changed movies. Is a JSON array of responses recieved; one for each modification.
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/JsonResponse"
+        # responses may fall through to errors
+        default:
+          description: Failed to change movies
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+    delete:
+      description: Removes all movies that match the params
+      # used as the method name of the controller
+      operationId: deleteMovies
+      parameters:
+        - name: title
+          in: query
+          description: If set, only deletes movies that with a title starting with this string
+          required: false
+          type: string
+        - name: year
+          in: query
+          description: If set, only deletes movies that were released on this year
+          required: false
+          type: string
+        - name: actor
+          in: query
+          description: If set, only deletes movies with an actor whose name starts with this string
+          required: false
+          type: string
+      responses:
+        "200":
+          description: Successfully changed movie
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/JsonResponse"
+        # responses may fall through to errors
+        default:
+          description: Failed to change movie
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /movies/reset:
+    # Having an action isn't exactly REST-ful design, but this ensures that there is always a way to test the collection.
+    x-swagger-router-controller: movieList
+    x-a127-apply: {}
+    post:
+      description: Resets the movies in the collection to a list of pre-defined movies.
+      # used as the method name of the controller
+      operationId: resetMovies
+      responses:
+        "200":
+          description: Returns all the responses used to reset the list of movies.
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/JsonResponse"
+        # responses may fall through to errors
+        default:
+          description: Returns all the successful responses for the reset, and the error message for the failure.
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /movies/{uuid}:
+    # Endpoint to do stuff to one movie
+    x-swagger-router-controller: movie
+    x-a127-apply: {}
+    get:
+      description: Returns the movie that has the specified uuid.
+      operationId: getMovie
+      parameters:
+        - name: uuid
+          in: path
+          description: UUID of movie to find
+          required: true
+          type: string
+      responses:
+        "200":
+          description: A movie was found
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/JsonResponse"
+        # responses may fall through to errors
+        default:
+          description: Failed to find the movie
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    put:
+      description: Changes the movie that has the specified uuid. Needs at least one valid param. Invalid ones are ignored.
+      operationId: changeMovie
+      parameters:
+        - name: uuid
+          in: path
+          description: UUID of movie to find
+          required: true
+          type: string
+        - name: new-params
+          in: body
+          description: The values in the movie to replace. If some values aren't specified, the old values are kept.
+          required: true
+          schema:
+            $ref: "#/definitions/NewParams"
+      responses:
+        "200":
+          description: A movie was changed
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/JsonResponse"
+        # responses may fall through to errors
+        default:
+          description: Failed to find the movie to change
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    delete:
+      description: Deletes the movie that has the specified uuid.
+      # used as the method name of the controller
+      operationId: deleteMovie
+      parameters:
+        - name: uuid
+          in: path
+          description: UUID of movie to delete
+          required: true
+          type: string
+      responses:
+        "200":
+          description: A movie was deleted
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/JsonResponse"
+        # responses may fall through to errors
+        default:
+          description: Failed to find the movie to delete
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+definitions:
+  # Should be JSON data defining the data to put into the movies. Is verified in code.
+  NewParams:
+    type: string
+    example:
+      {
+        "title": "newMovie",
+        "year": "2000",
+        "actors": ["actor1", "actor2", "actor3"]
+      }
+  JsonResponse:
+    type: string
+  ErrorResponse:
+    type: string
