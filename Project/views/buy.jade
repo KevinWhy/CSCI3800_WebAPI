@@ -1,0 +1,48 @@
+extends layout
+
+block append headers
+    -currHeader = 'Buy'
+    title Buy HoverX
+    style(type='text/css').
+        /* Add spacing between examples and input */
+        /*
+        .defaultBoxes {  margin-bottom: 2em;  }
+        */
+
+block append content
+    h1=currHeader
+    if canBuy
+        // If can buy item...
+        form(action='form', method='post')
+            div
+                span First name:
+                input(type='text', name='fname')
+                br
+            div
+                span Last name:
+                input(type='text', name='lname')
+                br
+            -if (typeof(ip) == 'string')
+                input(type='hidden', name='ip', value=ip)
+            input(type='submit', value='submit')
+        br
+        div.seperator
+        | To test a different IP address, input it below.
+        br
+    else
+        // If can't buy item...
+        span.error Sorry, we can't ship the package to your IP address. To buy an item, please input a valid IP address.
+        br
+    form.defaultBoxes
+        div
+            span UCD =
+            input(type='text', readonly, value='132.194.7.45')
+            br
+        div
+            span University of London =
+            input(type='text', readonly, value='128.86.130.195')
+            br
+    form(action='buy')
+        | IP Address:
+        input(type='text', name='ip')
+        input(type='submit', value='Submit')

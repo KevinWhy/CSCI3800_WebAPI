@@ -1,0 +1,16 @@
+extends layout
+
+block append headers
+    -var currHeader= 'Buy'
+    title Buy HoverX
+block append content
+    h1 Form
+    if canBuy
+        | First name:&nbsp;
+        = fname
+        br
+        | Last name:&nbsp;
+        = lname
+
+    else
+        | Sorry, you can't buy this item.
