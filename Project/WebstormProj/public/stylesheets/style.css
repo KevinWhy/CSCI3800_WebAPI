@@ -1,6 +1,26 @@
 body {
     font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-    padding: 1em .5em;
+    padding: 0 1em;
+    background: url("/images/Riding Hoverboard.jpg") no-repeat fixed right bottom;
+    background-size: 100%;
+}
+#banner img {
+    float: left;
+}
+#banner div {
+    display: table;
+    font: bold 50px Arial, sans-serif !important;
+    position: relative;
+    top: 40px;
+    left: .25em;
+}
+/* Style container that holds everything */
+#content {
+    padding: 0px 1em 1em;
+    background-color: rgba(255, 255, 255, .8);
+    border-radius: 1em;
+    text-align: center;
+    margin: 1em;
 }
 
 a {
@@ -11,8 +31,18 @@ h1 {
     text-align: center;
     color: crimson;
 }
+/* Center the list, but left-align the items */
+ul, .center {  display: inline-table; text-align: left;  }
+li:not(:first-child) {  margin-top: .5em;  }
 
-.seperator {
+.clearfix {  overflow: auto; zoom: 1;  }
+.clearfix::after {  clear: both;  }
+.indent {
+    position: relative;
+    left: 2em;
+    padding-right: 2em; /* positioning doesn't add more padding to the right, so manually add it */
+}
+.separator {
     width: 90%;
     height: .5em;
     background-color: crimson;
@@ -20,17 +50,99 @@ h1 {
     padding: 0;
 }
 
+/* Format the info boxes */
+.box,.grey_box, .safety, .error, #credits {
+    display: table;
+    max-width: 50%;
+    background-color: gold;
+    border: thin solid grey;
+    padding: .5em;
+    margin-bottom: .5em;
+    /* Center the boxes */
+    margin-left: auto;
+    margin-right: auto;
+}
+.safety {
+    font-size: 10px; /* Make text tiny */
+    font-weight: bold;
+    color: crimson;
+}
+/* Insert picture before error box */
+.error:before {
+    content:url('/images/Warning.png');
+    float: left;
+}
+.error {  background-color: lightgoldenrodyellow;  }
+#credits {
+    max-width: inherit;
+    background-color: crimson;
+    color: bisque;
+    font-weight: bold;
+    display: inherit;
+}
+
+.title {
+    border-bottom: medium solid grey;
+    text-align: center;
+    padding-bottom: .1em;
+    color: crimson;
+    font-weight: bold;
+}
+.box .title,.grey_box .title, .safety .title, .error .title, #credits .title {
+    display: block;
+}
+
 /* Align forms */
-form {  display: table; border-spacing: .5em;  }
-form > div {  display: table-row;  }
-form > div > *:not(br) {  display: table-cell  }
+form, .table {  display: table; border-spacing: .5em;  }
+form > div, .tr {  display: table-row;  }
+form > div > *:not(br), .td {  display: table-cell  }
 form > div > span:first-child {  text-align: right  }
+form > div > input[type=submit]:not(:first-child) {  margin-left: 5px;  }
+/* Style grey boxes */
+.grey_box {  background-color: lightgrey;  }
+.grey_box input[type=submit] {  background: firebrick; border: thin solid saddlebrown; color: lightgrey;  }
+.grey_box input[type=submit]:hover {  background: crimson; border: thin solid indigo;   }
+.grey_box input[type=submit]:active {  background: saddlebrown;  }
+
+/* Style tables (for receipt) */
+table {  border-collapse: collapse;  }
+th, td {  padding: .25em 1em;  }
+tr:not(:first-child):not(:last-child) {  background-color: lightgray;  }
+.overline {  border-top: thin solid grey;  }
+.underline {  border-bottom: thin solid grey;  }
+
+/* Style the models */
+.models {  text-align: center;  }
+.gallery > .thumbs {
+    display: inline-table; vertical-align: top;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.gallery > .thumbs > * {  display: table-row;  }
+.gallery > img {  margin-left: 10px; margin-right: 10px;  }
+.tooltip > *:not(.tooltiptext):hover {  border: medium solid black;  }
+.tooltip:hover .tooltiptext {  visibility: visible;  }
+.models .grey_box {  vertical-align: top; display: inline-table;  }
+.models table tr > td:first-child {  text-align: right;  }
+.models table tr > td:not(:first-child) {  text-align: left;  }
+.tooltip {  position: relative;  }
+.tooltiptext {
+    top: 105%;
+    text-align: center;
+    visibility: hidden;
+    position: absolute;
+    background-color: gold;
+    border: thin solid black;
+    border-radius: .25em;
+    padding: .25em .5em;
+}
 
 /* Style the toolbar */
 #toolbar {
     background-color: grey;
     font-size: 20px;
     width: 100%;
+    margin: .5em 0;
 /*    position: fixed;
     top: 20px;
     left: 0;*/

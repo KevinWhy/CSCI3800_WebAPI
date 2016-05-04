@@ -1,21 +1,34 @@
 doctype html
 html
     head
-        link(rel='stylesheet', href='/stylesheets/style.css')
+        link(rel='stylesheet', href=basepath+'stylesheets/style.css')
+        // Use jQuery
+        script(type='text/javascript' src='http://code.jquery.com/jquery.min.js')
         block headers
     body
-        h2#banner BANNER
+        #banner.clearfix
+            img(src=basepath+'images/Banner.png', height=100)
         #toolbar
             // Make all the headers
             -
-                headers = [
-                    {name:'Home', path:'home'},
-                    {name:'Buy', path:'buy'},
-                    {name:'About', path:'about'}
-                ]
+                if (!Array.isArray(headers))
+                    headers = [
+                        {name:'Home', path: basepath+'home'},
+                        {name:'Store', path: basepath+'store'},
+                        {name:'Support', path: basepath+'support'},
+                        {name:'About', path: basepath+'about'}
+                    ]
             each header in headers
                 if header.name == currHeader
                     a#curr_header #{header.name}
                 else
                     a(href=header.path) #{header.name}
-        block content
+        #content
+            block content
+        block footer
+            div#credits
+                | This website was designed for a CSCI 3800 Project.
+                br
+                | Team: The Whos
+                br
+                | Members: Anthony Areniego, Bill Adona, Duc Lee, Jacob Graves, Kevin Yang

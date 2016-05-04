@@ -10,8 +10,7 @@ var routers = [
     require('./routes/staticRouter'),
     require('./routes/forms')
 ];
-//var staticRouter = require('./routes/staticRouter');
-//var users = require('./routes/users');
+var sharedVars = require('./routes/sharedVars');
 
 var app = express();
 
@@ -49,7 +48,8 @@ if (app.get('env') === 'development') {
     res.status(err.status || 500);
     res.render('error', {
       message: err.message,
-      error: err
+      error: err,
+      basepath: sharedVars.basepath
     });
   });
 }

@@ -1,0 +1,77 @@
+block models
+    -
+        models = [
+            {name: 'Classic',htmlClass:'Classic', image: basepath+'images/WHO-verBoards/Classic.png',
+                price: '$99.99', colors: 'Black, White',
+                limit: '220 lbs', speed: '10 mph', range: '20 miles',
+                weight: '14 lbs'},
+            {name: 'Goliath',htmlClass:'Goliath', image: basepath+'images/WHO-verBoards/Goliath.png',
+                price: '$149.99', colors: 'Hot-Red, Navy-Blue, Black, White',
+                limit: '400 lbs', speed: '12 mph', range: '24 miles',
+                weight: '22 lbs'},
+            {name: 'The John Wayne',htmlClass:'TheJohnWayne', image: basepath+'images/WHO-verBoards/TheJohnWayne.png',
+                price: '$199.99', colors: 'Lightning-Yellow, Chrome-Silver, Hot-Red, Navy-Blue, Black, White',
+                limit: '300 lbs', speed: '15 mph', range: '30 miles',
+                weight: '16 lbs'}
+        ]
+
+    .models
+        span.gallery
+            // Make images for each model
+            span.thumbs
+                each model in models
+                    span.tooltip(class=model.htmlClass)
+                        img(src=model.image,alt=model.name + "_Thumb", height=48)
+                        span.tooltiptext=model.name
+            // Make large image for each model
+            each model in models
+                -visible = (model == models[0]) ? '' : 'none'; // Only show the first table
+                img(class=model.htmlClass,src=model.image,alt=model.name + "_Image", style='display:'+ visible)
+            // When a thumbnail is clicked, show the corresponding model
+            script(type='text/javascript').
+                var models = ['Classic', 'Goliath', 'TheJohnWayne']; // Model html class names from above, so client knows models also
+                $(function() { // When jQuery is loaded...
+                    $(".models ." + models[0]).not(".tooltip").show(); // Show the first model
+
+                    // Iterate through all the images...
+                    $(".models .thumbs > .tooltip").each(function() {
+                        $(this).click(function() {
+                            // When a model's image is clicked, run this
+                            for (var i in models) { // Loop through all the models...
+                                if ($(this).hasClass(models[i])) {
+                                    // If model = clicked image...
+                                    $(".models ." + models[i]).not(".tooltip").show();
+
+                                } else {
+                                    // If model != clicked image...
+                                    $(".models ." +models[i]).not(".tooltip").hide();
+                                }
+                            }
+                        });
+                    });
+                });
+
+        // Make stats for each model
+        each model in models
+            -visible = (model == models[0]) ? '' : 'none'; // Only show the first table
+            .grey_box(class=model.htmlClass, style='display:'+ visible)
+                .title #{model.name}
+                table.tr
+                    tr
+                        th Price
+                        td #{model.price}
+                    tr
+                        th Colors
+                        td #{model.colors}
+                    tr
+                        th Weight Limit
+                        td #{model.limit}
+                    tr
+                        th Max Speed
+                        td #{model.speed}
+                    tr
+                        th Range (on one full charge)
+                        td #{model.range}
+                    tr
+                        th Board Weight
+                        td #{model.weight}

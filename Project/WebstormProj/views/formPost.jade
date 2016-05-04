@@ -2,15 +2,39 @@ extends layout
 
 block append headers
     -var currHeader= 'Buy'
-    title Buy HoverX
+    title Buy WHO-ver Board
 block append content
-    h1 Form
+    h1 Bought WHO-ver Board
     if canBuy
-        | First name:&nbsp;
-        = fname
-        br
-        | Last name:&nbsp;
-        = lname
+        -
+            models = [
+                {name: 'Classic',htmlClass:'Classic', price: '$99.99'},
+                {name: 'Goliath',htmlClass:'Goliath', price: '$149.99'},
+                {name: 'The John Wayne',htmlClass:'TheJohnWayne', price: '$199.99'}
+            ]
+            modelFound = false
+        for boardModel in models
+            if (boardModel.htmlClass == model)
+                -modelFound = true
+                .grey_box
+                    | #{fname} #{lname}, thank you for buying a WHO-ver Board!
+                .box
+                    .title Receipt:
+                    table.tr
+                        tr.underline
+                            th.td Item
+                            th.td Price
+                        tr
+                            td.td=boardModel.name
+                            td.td=boardModel.price
+                        tr.overline
+                            td.td Total:
+                            td.td=boardModel.price
+        if !modelFound
+            // If didn't buy any item...
+            div.error.clearfix Sorry, you didn't select a WHO-ver Board to buy.
+                | Please try again.
 
     else
-        | Sorry, you can't buy this item.
+        div.error Sorry, due to pending federal restrictions, we cannot ship WHO-ver Board to your location.
+            | Please try again.

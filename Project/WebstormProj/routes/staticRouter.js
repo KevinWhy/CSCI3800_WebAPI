@@ -4,11 +4,13 @@
 
 var express = require('express');
 var util = require('util');
+var sharedVars = require('./sharedVars');
 var router = express.Router();
 
 // List of pages to route
 var staticPages = [
     '/about',
+    '/support',
     {path:['/home','/'], page:'home'} // Allow '/' and 'index' to route to same page
 ];
 
@@ -26,7 +28,7 @@ for (var index in staticPages) {
 
                 var dotIndex = currPage.lastIndexOf('\.');
                 var pageName = (dotIndex >= 0) ? currPage.substr(1, dotIndex-1) : currPage.substr(1);
-                res.render(pageName);
+                res.render(pageName, sharedVars);
                 res.end();
             });
 
@@ -34,7 +36,7 @@ for (var index in staticPages) {
             console.log(util.format('\tobj: %j', currPage));
             router.get(currPage.path, function(req, res, next) { // Route using currPage.path
                 console.log(util.format('Getting obj: %j', currPage));
-                res.render(currPage.page);
+                res.render(currPage.page, sharedVars);
                 res.end();
             });
         }

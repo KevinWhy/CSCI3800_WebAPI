@@ -1,0 +1,77 @@
+extends layout
+
+block append headers
+    -currHeader = 'Store'
+    title Buy WHO-ver Board
+    // Append model to submission
+    script(type='text/javascript').
+        var models = ['Classic', 'Goliath', 'TheJohnWayne']; // Model's html class names
+        $(function() { // When jQuery is loaded...
+            // Run stuff when but form is submitted.
+            $("#buy").submit(function(event) {
+                var form = this;
+                //console.log("Buy form submitted."); // DEBUG
+                // Loop through all the visible model classes...
+                for (var i in models) {
+                    //console.log("\tChecking model: " + models[i] +"..."); // DEBUG
+                    // If current model is visible, set form's model to current model
+                    if ($(".models ." + models[i] + ":visible").not(".tooltip").length) {
+                        //console.log("Model visible: "+ models[i]); // DEBUG
+                        $(this).find('input[name="model"]').val(models[i]);
+                        return;
+                    }
+                }
+
+                // No model is visible...
+                $("#no_model").show(); // Show error message
+                event.preventDefault(); // Stop form from being sent
+            });
+        });
+
+block append content
+    h1=currHeader
+    if canBuy
+        // If can buy item...
+        include models
+        form.center#buy(action='./form', method='post')
+            div
+                span First name:
+                input(type='text',inputmode='latin-name',required, name='fname')
+            div
+                span Last name:
+                input(type='text',inputmode='latin-name',required,  name='lname')
+            div
+                span Card Info:
+                input(type='text',inputmode='numeric',required, name='credit')
+            input(type='hidden', name='model', value='')
+            if (typeof(ip) == 'string')
+                input(type='hidden', name='ip', value=ip)
+            input(type='submit', value='submit')
+        .error.clearfix#no_model(style='display: none') Please select a model to buy.
+        .separator
+        | To test a different IP address, input it below.
+    else
+        // If can't buy item...
+        .error.clearfix Sorry, we can't ship the package to your IP address.
+            | To buy an item, please input a valid IP address.
+
+    .grey_box
+        .title Change IP Address
+        form
+            div
+                span UCD =
+                input(type='text', readonly, value='132.194.7.45')
+            div
+                span University of London =
+                input(type='text', readonly, value='128.86.130.195')
+        form(action='./store')
+            div
+                span IP Address:
+                input(type='text', name='ip')
+                input(type='submit', value='Submit')
+    .safety
+        | We are not responsible for any explosions incurred by gazing upon WHO-ver Board.
+        |  Side-effects include explosions, deaxphiliation, and apple trees. Do not ride for extended periods of time.
+        br
+        | By buying WHO-ver Board, you acknowledge the risks of riding a hoverboard.
+        |  Do not transport WHO-ver Board by airplane.

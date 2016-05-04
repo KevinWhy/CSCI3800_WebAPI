@@ -6,21 +6,23 @@
 var express = require('express');
 var http = require('http');
 var util = require('util');
+var sharedVars = require('./sharedVars');
 var router = express.Router();
 
 /*
- * When user GETs the buy form, tell them if they can/can't buy an item
+ * When user GETs the store form, tell them if they can/can't buy an item
  */
-router.get('/buy', function(req, res, next) {
+router.get('/store', function(req, res, next) {
     var ipAddr = req.ip;
     // DEBUG: if IP Address was specified, use that one instead
     if (typeof(req.query.ip) == 'string')
         ipAddr = req.query.ip;
 
-    console.log('Getting form: buy__ip='+ ipAddr); // DEBUG
-    canBuy(ipAddr, function(buyStatus) {
-        res.render('buy', {
-            canBuy: buyStatus,
+    console.log('Getting form: store__ip='+ ipAddr); // DEBUG
+    canBuy(ipAddr, function(storeStatus) {
+        res.render('store', {
+            basepath: sharedVars.basepath,
+            canBuy: storeStatus,
             ip: ipAddr
         });
         res.end();
@@ -28,7 +30,7 @@ router.get('/buy', function(req, res, next) {
 });
 
 /*
- * When user posts the form, show the params given
+ * When user entera all of their information, show the params given
  */
 router.post('/form', function(req, res, next) {
     var ipAddr = req.ip;
@@ -36,14 +38,20 @@ router.post('/form', function(req, res, next) {
         ipAddr = req.body.ip;
 
     console.log('POSTing form: form__ip='+ ipAddr); // DEBUG
-    canBuy(ipAddr, function(buyStatus) {
+    canBuy(ipAddr, function(storeStatus) {
         res.render('formPost', {
+            basepath: sharedVars.basepath,
             fname: req.body.fname,
             lname: req.body.lname,
-            canBuy: buyStatus
+            model: req.body.model,
+            canBuy: storeStatus
         });
         res.end();
     });
+});
+// If user gets the submitted form, redirect to the store page
+router.get('/form', function(req, res, next) {
+    res.redirect('./store');
 });
 
 /**
@@ -77,6 +85,7 @@ function canBuy(ipAddress, callback) {
     });
     ipReq.end();
 }
+/*
 // Test the canBuy...
 var ips = ['128.0.0.0', '132.194.7.45', '212.58.246.54'];
 for (var index in ips) {
@@ -86,5 +95,6 @@ for (var index in ips) {
         });
     })(ips[index]);
 }
+*/
 
 module.exports = router;
